@@ -4,6 +4,10 @@ import { randomUUID } from "crypto";
 import simpleGit from "simple-git";
 import { getFiles, uploadFiles } from "./file";
 import path from "path";
+import { createClient } from "redis";
+const publisher = createClient();
+publisher.connect();
+
 
 const app = express();
 app.use(cors())
@@ -22,7 +26,7 @@ app.post("/deploy", async (req, res) => {
         await uploadFiles(file.slice(__dirname.length + 1), file);
     })
     await Promise.all(promiseUpload)
-
+    publisher.lPush("build-queue", UUID);
     res.json({
         UUID: UUID
     })
