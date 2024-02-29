@@ -1,5 +1,6 @@
 import { commandOptions, createClient } from "redis";
 import { dls3Folder } from "./aws";
+import { build } from "./utils";
 
 const subscriber = createClient();
 subscriber.connect();
@@ -16,7 +17,7 @@ subscriber.connect();
         console.log(res)
         console.log(id)
         await dls3Folder(`output/${id}`)
-
+        await build(id)
     }
 })();
 
