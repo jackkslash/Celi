@@ -5,6 +5,8 @@ import { build } from "./utils";
 const subscriber = createClient();
 subscriber.connect();
 
+const publisher = createClient();
+publisher.connect();
 
 (async function () {
     while (1) {
@@ -19,6 +21,7 @@ subscriber.connect();
         await dls3Folder(`output/${id}`)
         await build(id)
         uploadFinalBuild(id);
+        publisher.hSet("status", id, "deployed")
     }
 })();
 
